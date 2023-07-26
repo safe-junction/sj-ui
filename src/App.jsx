@@ -47,7 +47,7 @@ const App = () => {
           <span className="text-gray-600 text-sm">Swap</span>
         </div>
         <div className="mt-3">
-          <SwapLine amount={sourceAssetAmount} asset={sourceAsset} onChangeAmount={onChangeSourceAssetAmount} />
+          <SwapLine amount={sourceAssetAmount} asset={sourceAsset} onChangeAmount={onChangeSourceAssetAmount} withMax />
         </div>
         <div className="relative">
           <button
