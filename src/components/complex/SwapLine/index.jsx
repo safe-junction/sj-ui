@@ -13,7 +13,7 @@ const SwapLine = ({ amount, asset, onChangeAmount = () => null }) => {
         />
         <div className="flex items-center justify-center pt-1 pb-1 pl-1 pr-2 bg-gray-200 hover:bg-gray-300 text-white rounded-3xl text-sm cursor-pointer">
           <div className="h-8 w-8">
-            <div class="relative shadow-lg rounded-full h-full w-full">
+            <div className="relative shadow-lg rounded-full h-full w-full">
               <img
                 height={42}
                 width={42}

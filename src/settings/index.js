@@ -32,21 +32,24 @@ const settings = {
   assets: [
     {
       address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-      name: 'Wrapped XDAI',
-      symbol: 'WXDAI',
-      decimals: 18,
       chain: gnosis,
+      decimals: 18,
+      id: 'WXDAI_GNOSIS',
       img: './assets/png/dai.png',
-      networkImg: './assets/png/gnosis.png'
+      name: 'Wrapped XDAI',
+      networkImg: './assets/png/gnosis.png',
+      sjTokenAddress: '0x1937C0CdE9B9ffC4bd14364BB0074cC79b6783C5',
+      symbol: 'WXDAI'
     },
     {
       address: '0x5a3dbF1315FFb7EF4e8d4092098DA41D50316d18',
-      name: 'SJ XDAI',
-      symbol: '*WXDAI',
-      decimals: 18,
       chain: polygon,
+      decimals: 18,
       img: './assets/png/_dai.png',
-      networkImg: './assets/png/polygon.png'
+      name: 'SJ XDAI',
+      networkImg: './assets/png/polygon.png',
+      sjTokenAddress: '0x5a3dbF1315FFb7EF4e8d4092098DA41D50316d18',
+      symbol: '*WXDAI'
     }
   ]
 }
