@@ -21,11 +21,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --config ./.prettierrc.js --write  \"./*/**/*.+(js|json|jsx)\""
+    "format": "prettier --config ./.prettierrc.js --write  \"./*/**/*.+(js|json|jsx)\"",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
