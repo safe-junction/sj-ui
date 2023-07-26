@@ -39,8 +39,8 @@ const useAssets = () => {
 
               return {
                 balance: offchainAmount.toFixed(),
-                formattedBalance: formatAssetAmount(offchainAmount, ''),
-                formattedBalanceWithSymbol: formatAssetAmount(offchainAmount, asset.symbol)
+                formattedBalance: formatAssetAmount(offchainAmount, '', { decimals: 6 }),
+                formattedBalanceWithSymbol: formatAssetAmount(offchainAmount, asset.symbol, { decimals: 6 })
               }
             })
           )

@@ -49,6 +49,10 @@ const useSwap = () => {
     try {
       const amount = BigNumber(sourceAssetAmount).multipliedBy(10 ** sourceAsset.decimals)
 
+      if (walletClient.chain.id !== sourceAsset.chain.id) {
+        walletClient.switchChain({ id: sourceAsset.chain.id })
+      }
+
       if (sourceAsset.sjTokenAddress !== sourceAsset.address) {
         const allowance = await publicClient.readContract({
           account: address,
