@@ -1,6 +1,6 @@
-import { ProgressBar, Step } from 'react-step-progress-bar'
+import React from 'react'
 import { FiArrowDown } from 'react-icons/fi'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useAccount, useNetwork } from 'wagmi'
 import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit'
 
@@ -8,9 +8,9 @@ import { useSwap } from './hooks/use-swap'
 
 import Header from './components/complex/Header'
 import SwapLine from './components/complex/SwapLine'
+import StepProgressBar from './components/base/StepProgressBar'
 
 const App = () => {
-  const [status, setStatus] = useState(0)
   const { isConnected, isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
   const { openChainModal } = useChainModal()
@@ -19,10 +19,12 @@ const App = () => {
     destinationAsset,
     destinationAssetAmount,
     invert,
+    isSwapping,
     onChangeDestinationAssetAmount,
     onChangeSourceAssetAmount,
     sourceAsset,
     sourceAssetAmount,
+    status,
     swap
   } = useSwap()
 
@@ -43,20 +45,22 @@ const App = () => {
   const buttonText = useMemo(() => {
     if (isConnecting) return 'Connecting ...'
     if (chain?.unsupported) return 'Wrong network'
+    if (sourceAssetAmount === '') return 'Enter an amount ...'
+    if (isSwapping) return 'Swapping ...'
     if (isConnected) return 'Swap'
     if (!isConnected && !isConnecting) return 'Connect Wallet'
-  }, [isConnected, isConnecting, chain])
+  }, [isConnected, isConnecting, chain, isSwapping, sourceAssetAmount])
 
   const btnDisabled = useMemo(() => {
     if (chain?.unsupported) return false
 
-    return isConnecting || sourceAssetAmount === ''
-  }, [chain?.unsupported, isConnecting, sourceAssetAmount])
+    return isConnecting || sourceAssetAmount === '' || isSwapping
+  }, [chain?.unsupported, isConnecting, sourceAssetAmount, isSwapping])
 
   return (
     <div>
       <Header />
-      <div className="max-w-md mx-auto bg-white pt-3 pb-3 pl-2 pr-2 border border-gray-200 rounded-xl shadow-sm">
+      <div className="max-w-md mx-auto bg-white pt-3 pb-3 pl-2 pr-2 border border-gray-200 rounded-xl shadow-sm mt-10">
         <div>
           <span className="text-gray-600 text-sm">Swap</span>
         </div>
@@ -78,54 +82,12 @@ const App = () => {
             onChangeAmount={onChangeDestinationAssetAmount}
           />
         </div>
-        {status > 0 && (
+        {status && (
           <div className="mt-6 mb-6 pl-4 pr-4">
-            <ProgressBar
-              percent={status === 0 ? 0 : status === 1 ? 25 : status === 2 ? 50 : 100}
-              hasStepZero={true}
-              stepPositions={[0, 25, 50, 75, 100]}
-            >
-              <Step transition="scale">
-                {({ accomplished }) => (
-                  <div
-                    className={`h-4 w-4 ${accomplished ? 'bg-green-500' : 'bg-gray-200'} rounded-full`}
-                    accomplished={accomplished}
-                  ></div>
-                )}
-              </Step>
-              <Step transition="scale">
-                {({ accomplished }) => (
-                  <div
-                    className={`h-4 w-4 ${accomplished ? 'bg-green-500' : 'bg-gray-200'} rounded-full`}
-                    accomplished={accomplished}
-                  ></div>
-                )}
-              </Step>
-              <Step transition="scale">
-                {({ accomplished }) => (
-                  <div
-                    className={`h-4 w-4 ${accomplished ? 'bg-green-500' : 'bg-gray-200'} rounded-full`}
-                    accomplished={accomplished}
-                  ></div>
-                )}
-              </Step>
-              <Step transition="scale">
-                {({ accomplished }) => (
-                  <div
-                    className={`h-4 w-4 ${accomplished ? 'bg-green-500' : 'bg-gray-200'} rounded-full`}
-                    accomplished={accomplished}
-                  ></div>
-                )}
-              </Step>
-              <Step transition="scale">
-                {({ accomplished }) => (
-                  <div
-                    className={`h-4 w-4 ${accomplished ? 'bg-green-500' : 'bg-gray-200'} rounded-full`}
-                    accomplished={accomplished}
-                  ></div>
-                )}
-              </Step>
-            </ProgressBar>
+            <StepProgressBar percent={status.percentage} hasStepZero={true} stepPositions={[0, 25, 50, 75, 100]} />
+            <div className="mt-4 flex items-center justify-center">
+              <span className="text-gray-600 text-sm">{status.message}</span>
+            </div>
           </div>
         )}
         <div className="mt-2">

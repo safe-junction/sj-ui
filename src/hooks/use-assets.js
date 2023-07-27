@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { createPublicClient, http } from 'viem'
 import { erc20ABI } from 'wagmi'
@@ -12,53 +12,63 @@ const useAssets = () => {
   const { address: userAddress } = useAccount()
   const [balances, setBalances] = useState([])
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        if (userAddress) {
-          const localBalances = await Promise.all(
-            settings.assets.map(({ address: tokenAddress, chain }) => {
-              const publicClient = createPublicClient({
-                chain,
-                transport: http()
-              })
-
-              return publicClient.readContract({
-                address: tokenAddress,
-                abi: erc20ABI,
-                functionName: 'balanceOf',
-                args: [userAddress]
-              })
+  const refresh = useCallback(async () => {
+    try {
+      if (userAddress) {
+        const localBalances = await Promise.all(
+          settings.assets.map(({ address: tokenAddress, chain }) => {
+            const publicClient = createPublicClient({
+              chain,
+              transport: http()
             })
-          )
 
-          setBalances(
-            localBalances.map((_balance, _index) => {
-              const asset = settings.assets[_index]
-              const offchainAmount = BigNumber(_balance).dividedBy(10 ** asset.decimals)
-
-              return {
-                balance: offchainAmount.toFixed(),
-                formattedBalance: formatAssetAmount(offchainAmount, '', { decimals: 6 }),
-                formattedBalanceWithSymbol: formatAssetAmount(offchainAmount, asset.symbol, { decimals: 6 })
-              }
+            return publicClient.readContract({
+              address: tokenAddress,
+              abi: erc20ABI,
+              functionName: 'balanceOf',
+              args: [userAddress]
             })
-          )
-        } else {
-          setBalances([])
-        }
-      } catch (_err) {
-        console.error(_err)
+          })
+        )
+
+        setBalances(
+          localBalances.map((_balance, _index) => {
+            const asset = settings.assets[_index]
+            const offchainAmount = BigNumber(_balance).dividedBy(10 ** asset.decimals)
+
+            return {
+              balance: offchainAmount.toFixed(),
+              formattedBalance: formatAssetAmount(offchainAmount, '', { decimals: 6, forceDecimals: true }),
+              formattedBalanceWithSymbol: formatAssetAmount(offchainAmount, asset.symbol, {
+                decimals: 6,
+                forceDecimals: true
+              })
+            }
+          })
+        )
+      } else {
+        setBalances([])
       }
-    })()
+    } catch (_err) {
+      console.error(_err)
+    }
   }, [userAddress])
 
-  return useMemo(() => {
+  useEffect(() => {
+    refresh()
+  }, [refresh])
+
+  const assets = useMemo(() => {
     return settings.assets.map((_asset, _index) => ({
       ..._asset,
       ...balances[_index]
     }))
   }, [balances])
+
+  return {
+    assets,
+    refresh
+  }
 }
 
 export { useAssets }
