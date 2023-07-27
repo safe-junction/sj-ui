@@ -43,19 +43,23 @@ const App = () => {
   }, [isConnected, chain?.unsupported, openConnectModal, openChainModal, swap])
 
   const buttonText = useMemo(() => {
+    if (!isConnected && !isConnecting) return 'Connect Wallet'
     if (isConnecting) return 'Connecting ...'
     if (chain?.unsupported) return 'Wrong network'
     if (sourceAssetAmount === '') return 'Enter an amount ...'
     if (isSwapping) return 'Swapping ...'
     if (isConnected) return 'Swap'
-    if (!isConnected && !isConnecting) return 'Connect Wallet'
-  }, [isConnected, isConnecting, chain, isSwapping, sourceAssetAmount])
+  }, [isConnected, isConnecting, isSwapping, sourceAssetAmount, chain?.unsupported])
 
   const btnDisabled = useMemo(() => {
-    if (chain?.unsupported) return false
-
+    if (chain?.unsupported || !isConnected) return false
     return isConnecting || sourceAssetAmount === '' || isSwapping
-  }, [chain?.unsupported, isConnecting, sourceAssetAmount, isSwapping])
+  }, [chain?.unsupported, isConnecting, sourceAssetAmount, isSwapping, isConnected])
+
+  const swapLineDisabled = useMemo(() => {
+    if (!isConnected || chain?.unsupported || isSwapping) return true
+    return false
+  }, [isConnected, chain?.unsupported, isSwapping])
 
   return (
     <div>
@@ -65,7 +69,13 @@ const App = () => {
           <span className="text-gray-600 text-sm">Swap</span>
         </div>
         <div className="mt-3">
-          <SwapLine amount={sourceAssetAmount} asset={sourceAsset} onChangeAmount={onChangeSourceAssetAmount} withMax />
+          <SwapLine
+            disabled={swapLineDisabled}
+            amount={sourceAssetAmount}
+            asset={sourceAsset}
+            onChangeAmount={onChangeSourceAssetAmount}
+            withMax
+          />
         </div>
         <div className="relative">
           <button
@@ -77,6 +87,7 @@ const App = () => {
         </div>
         <div className="mt-1">
           <SwapLine
+            disabled={swapLineDisabled}
             amount={destinationAssetAmount}
             asset={destinationAsset}
             onChangeAmount={onChangeDestinationAssetAmount}

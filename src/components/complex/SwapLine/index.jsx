@@ -1,6 +1,6 @@
 import { IoIosArrowDown } from 'react-icons/io'
 
-const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false }) => {
+const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false, disabled = false }) => {
   return (
     <div className="flex flex-col items-center rounded-md overflow-hidden rounded-xl bg-gray-100 pl-4 pr-4">
       <div className="flex items-center justify-between mt-4 mb-4 ">
@@ -9,6 +9,7 @@ const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false 
           type="text"
           placeholder="0"
           value={amount}
+          disabled={disabled}
           onChange={(_e) => onChangeAmount(_e.target.value)}
         />
         <div className="flex items-center justify-center pt-1 pb-1 pl-1 pr-2 bg-gray-200 hover:bg-gray-300 text-white rounded-3xl text-sm cursor-pointer">

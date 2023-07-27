@@ -19,6 +19,13 @@ const useSwap = () => {
   const [isSwapping, setIsSwapping] = useState(false)
 
   useEffect(() => {
+    if (!address) {
+      setSourceAssetAmount('')
+      setDestinationAssetAmount('')
+    }
+  }, [address])
+
+  useEffect(() => {
     setSourceAsset(assets[0])
   }, [assets])
 
@@ -144,6 +151,9 @@ const useSwap = () => {
         percentage: 100,
         message: '🎉 The Fast Lane did its magic! Process completed. 🎉'
       })
+
+      setSourceAssetAmount('')
+      setDestinationAssetAmount('')
 
       refresh()
     } catch (_err) {
