@@ -58,34 +58,36 @@ const Header = () => {
                       )
                     }
 
-                    if (chain.unsupported) {
+                    /*if (chain.unsupported) {
                       return (
                         <button
                           onClick={openChainModal}
                           type="button"
-                          className="flex justify-between items-center bg-red-400 hover:bg-red-500 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2 text-white"
+                          className="flex justify-between items-center bg-red-400 hover:bg-red-500 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2 text-white text-lg"
                         >
                           Wrong network
                         </button>
                       )
-                    }
+                    }*/
 
                     return (
                       <div className="flex justify-between items-center">
-                        <button
-                          onClick={openChainModal}
-                          className="flex justify-between items-center bg-gray-100 hover:bg-gray-200 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2"
-                          type="button"
-                        >
-                          {chain.hasIcon && (
-                            <div height={24} width={24} className=" flex justify-between items-center">
-                              {chain.iconUrl && (
-                                <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} height={24} width={24} />
-                              )}
-                              {chainModalOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
-                            </div>
-                          )}
-                        </button>
+                        {!chain.unsupported && (
+                          <button
+                            onClick={openChainModal}
+                            className="flex justify-between items-center bg-gray-100 hover:bg-gray-200 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2"
+                            type="button"
+                          >
+                            {chain.hasIcon && (
+                              <div height={24} width={24} className=" flex justify-between items-center">
+                                {chain.iconUrl && (
+                                  <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} height={24} width={24} />
+                                )}
+                                {chainModalOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                              </div>
+                            )}
+                          </button>
+                        )}
                         <button
                           onClick={openAccountModal}
                           type="button"

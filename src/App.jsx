@@ -1,8 +1,8 @@
 import { ProgressBar, Step } from 'react-step-progress-bar'
 import { FiArrowDown } from 'react-icons/fi'
 import { useCallback, useMemo, useState } from 'react'
-import { useAccount } from 'wagmi'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useAccount, useNetwork } from 'wagmi'
+import { useChainModal, useConnectModal } from '@rainbow-me/rainbowkit'
 
 import { useSwap } from './hooks/use-swap'
 
@@ -13,6 +13,8 @@ const App = () => {
   const [status, setStatus] = useState(0)
   const { isConnected, isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
+  const { openChainModal } = useChainModal()
+  const { chain } = useNetwork()
   const {
     destinationAsset,
     destinationAssetAmount,
@@ -30,14 +32,26 @@ const App = () => {
       return
     }
 
+    if (chain?.unsupported) {
+      openChainModal()
+      return
+    }
+
     swap()
-  }, [isConnected, openConnectModal, swap])
+  }, [isConnected, chain?.unsupported, openConnectModal, openChainModal, swap])
 
   const buttonText = useMemo(() => {
     if (isConnecting) return 'Connecting ...'
+    if (chain?.unsupported) return 'Wrong network'
     if (isConnected) return 'Swap'
     if (!isConnected && !isConnecting) return 'Connect Wallet'
-  }, [isConnected, isConnecting])
+  }, [isConnected, isConnecting, chain])
+
+  const btnDisabled = useMemo(() => {
+    if (chain?.unsupported) return false
+
+    return isConnecting || sourceAssetAmount === ''
+  }, [chain?.unsupported, isConnecting, sourceAssetAmount])
 
   return (
     <div>
@@ -116,7 +130,7 @@ const App = () => {
         )}
         <div className="mt-2">
           <button
-            disabled={isConnecting || sourceAssetAmount === ''}
+            disabled={btnDisabled}
             className="pt-2 pb-2 pl-3 pr-3 bg-green-400 hover:bg-green-500 text-white rounded-2xl font-regular text-lg w-full h-14 disabled:opacity-50"
             onClick={onButtonClick}
           >
