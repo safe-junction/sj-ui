@@ -1,36 +1,15 @@
-import { gnosis, polygon } from 'viem/chains'
+import { gnosis, goerli } from 'viem/chains'
 
 const settings = {
-  gnosis: {
-    governance: '0x304Db00E1C1C78e240D7BE4a0483B36Bb37FAbFF',
-    sjDispatcher: '0xAd7939c19c919EA94Df2017823a24E31C1387f2f',
-    sjFactory: '0xbF6D150bf6368d4d90fB9E4B6Da91b4269Bf8E13',
-    sjReceiver: '0x93C3dB183C7aE99598285c96c95C2c6e9e70b9b6',
-    sjToken: {
-      sjTokenAddress: '0x1937C0CdE9B9ffC4bd14364BB0074cC79b6783C5',
-      underlyingTokenAddress: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-      underlyingTokenName: 'Wrapped XDAI',
-      underlyingTokenSymbol: 'WXDAI',
-      underlyingTokenDecimals: '18',
-      underlyingTokenChainId: '100'
-    }
-  },
-  polygon: {
-    governance: '0xBfeD3f449D6f0Ff9aaA2bA219947216782C556eB',
-    sjDispatcher: '0x361dAEcE9157D82801f234311477Af8Af35Fae57',
-    sjFactory: '0xFe1Ec8c7d004294414D5bF710daf9B735e2E580a',
-    sjReceiver: '0x1dA797F5CbA2e027391b49C5fc258e921211BA5a',
-    sjToken: {
-      sjTokenAddress: '0x5a3dbF1315FFb7EF4e8d4092098DA41D50316d18',
-      underlyingTokenAddress: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-      underlyingTokenName: 'Wrapped XDAI',
-      underlyingTokenSymbol: 'WXDAI',
-      underlyingTokenDecimals: '18',
-      underlyingTokenChainId: '100'
+  core: {
+    100: {
+      hashi: {
+        yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b'
+      }
     }
   },
   assets: [
-    {
+    /*{
       address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
       chain: gnosis,
       decimals: 18,
@@ -38,18 +17,40 @@ const settings = {
       img: './assets/png/dai.png',
       name: 'Wrapped XDAI',
       networkImg: './assets/png/gnosis.png',
-      sjTokenAddress: '0x1937C0CdE9B9ffC4bd14364BB0074cC79b6783C5',
+      sjTokenAddress: '0x74323AE38f3cc0c3472ca1c59505AEE77CD90D6c',
       symbol: 'WXDAI'
     },
     {
-      address: '0x5a3dbF1315FFb7EF4e8d4092098DA41D50316d18',
+      address: '0x43951194F8f7FAaB0e89b24a1ee849E5EBA05210',
       chain: polygon,
       decimals: 18,
       img: './assets/png/_dai.png',
       name: 'SJ XDAI',
       networkImg: './assets/png/polygon.png',
-      sjTokenAddress: '0x5a3dbF1315FFb7EF4e8d4092098DA41D50316d18',
+      sjTokenAddress: '0x43951194F8f7FAaB0e89b24a1ee849E5EBA05210',
       symbol: '*WXDAI'
+    }*/
+    {
+      address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+      chain: goerli,
+      decimals: 18,
+      id: 'WETH_GOERLI',
+      img: './assets/png/ethereum.png',
+      name: 'Wrapped Ether',
+      networkImg: './assets/svg/goerli.svg',
+      sjTokenAddress: '0xFa1122c3711AedaF46ac6090dC48F16573177BeC',
+      symbol: 'WETH'
+    },
+    {
+      address: '0x2815e7Cd58d25D1638776A741318E9b79C4AE845',
+      chain: gnosis,
+      id: 'WETH_GNOSIS',
+      decimals: 18,
+      img: './assets/png/ethereum.png',
+      name: 'SJ Wrapped Ether',
+      networkImg: './assets/svg/gnosis.svg',
+      sjTokenAddress: '0x2815e7Cd58d25D1638776A741318E9b79C4AE845',
+      symbol: '*WETH'
     }
   ]
 }

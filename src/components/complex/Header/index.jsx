@@ -7,12 +7,9 @@ const Header = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex space-x-4 items-center justify-center">
           <img src="./assets/png/logo.png" width={32} height={32} alt="logo" />
-          <a
-            href="#"
-            className="flex justify-between items-center bg-white hover:bg-gray-100 p-2 rounded-xl ml-1 mr-2 text-gray-600"
-          >
+          <span className="flex justify-between items-center bg-white hover:bg-gray-100 p-2 rounded-xl ml-1 mr-2 text-gray-600 cursor-pointer">
             Swap
-          </a>
+          </span>
         </div>
 
         <div className="flex space-x-4">

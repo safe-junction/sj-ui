@@ -62,7 +62,7 @@ const App = () => {
   }, [isConnected, chain?.unsupported, isSwapping])
 
   return (
-    <div>
+    <React.Fragment>
       <Header />
       <div className="max-w-md mx-auto bg-white pt-3 pb-3 pl-2 pr-2 border border-gray-200 rounded-xl shadow-sm mt-10">
         <div>
@@ -97,7 +97,9 @@ const App = () => {
           <div className="mt-6 mb-6 pl-4 pr-4">
             <StepProgressBar percent={status.percentage} hasStepZero={true} stepPositions={[0, 25, 50, 75, 100]} />
             <div className="mt-4 flex items-center justify-center">
-              <span className="text-gray-600 text-sm">{status.message}</span>
+              <span className="text-gray-600 text-sm">
+                <div dangerouslySetInnerHTML={{ __html: status.message }} />
+              </span>
             </div>
           </div>
         )}
@@ -111,7 +113,7 @@ const App = () => {
           </button>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

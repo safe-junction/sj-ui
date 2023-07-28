@@ -6,20 +6,21 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { polygon, gnosis } from 'wagmi/chains'
+import { goerli, gnosis } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
-gnosis.iconUrl = './assets/png/gnosis.png'
+gnosis.iconUrl = './assets/svg/gnosis.svg'
 
 const { chains, publicClient } = configureChains(
-  [gnosis, polygon],
+  [gnosis, goerli],
   [
     jsonRpcProvider({ rpc: () => ({ http: process.env.REACT_APP_GNOSIS_NODE }) }),
-    jsonRpcProvider({ rpc: () => ({ http: process.env.REACT_APP_POLYGON_NODE }) }),
+    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_API_KEY }),
     publicProvider()
   ]
 )
