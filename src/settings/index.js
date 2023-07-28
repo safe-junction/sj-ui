@@ -5,31 +5,13 @@ const settings = {
     100: {
       hashi: {
         yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b'
+      },
+      safeJunction: {
+        sjReceiver: '0x6Fd8B22924151DFD29167aFc2C921ff157127382'
       }
     }
   },
   assets: [
-    /*{
-      address: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
-      chain: gnosis,
-      decimals: 18,
-      id: 'WXDAI_GNOSIS',
-      img: './assets/png/dai.png',
-      name: 'Wrapped XDAI',
-      networkImg: './assets/png/gnosis.png',
-      sjTokenAddress: '0x74323AE38f3cc0c3472ca1c59505AEE77CD90D6c',
-      symbol: 'WXDAI'
-    },
-    {
-      address: '0x43951194F8f7FAaB0e89b24a1ee849E5EBA05210',
-      chain: polygon,
-      decimals: 18,
-      img: './assets/png/_dai.png',
-      name: 'SJ XDAI',
-      networkImg: './assets/png/polygon.png',
-      sjTokenAddress: '0x43951194F8f7FAaB0e89b24a1ee849E5EBA05210',
-      symbol: '*WXDAI'
-    }*/
     {
       address: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
       chain: goerli,

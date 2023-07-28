@@ -10,6 +10,7 @@ import { goerli, gnosis } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { HashRouter } from 'react-router-dom'
 
 import App from './App'
 import reportWebVitals from './reportWebVitals'
@@ -42,7 +43,9 @@ root.render(
   <React.StrictMode>
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <App />
+        <HashRouter>
+          <App />
+        </HashRouter>
       </RainbowKitProvider>
     </WagmiConfig>
   </React.StrictMode>

@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { createPublicClient, http, parseAbiItem } from 'viem'
 
 import settings from '../settings'
-import { getTransactionExplorerLinkByChain } from '../utils/explorer'
+import { getAnchorTagTransactionExpolorerByChain } from '../utils/explorer'
 
 import SJTokenAbi from '../utils/abi/SJTokenAbi.json'
 
@@ -122,10 +122,11 @@ const useSwap = () => {
 
           setStatus({
             percentage: 0,
-            message: `<a href="${getTransactionExplorerLinkByChain(
+            message: `${getAnchorTagTransactionExpolorerByChain(
               hash,
-              sourceAsset.chain
-            )}" class="text-blue-500 underline" target="_blank">Transaction</a> broadcated. Waiting for confirmation ...`
+              sourceAsset.chain,
+              'Transaction'
+            )} broadcated. Waiting for confirmation ...`
           })
           await publicClientSource.waitForTransactionReceipt({ hash })
 
@@ -148,20 +149,22 @@ const useSwap = () => {
 
       setStatus({
         percentage: 25,
-        message: `<a href="${getTransactionExplorerLinkByChain(
+        message: `${getAnchorTagTransactionExpolorerByChain(
           hash,
-          sourceAsset.chain
-        )}" class="text-blue-500 underline" target="_blank">Transaction</a> broadcated. Waiting for confirmation ...`
+          sourceAsset.chain,
+          'Transaction'
+        )} broadcated. Waiting for confirmation ...`
       })
 
       const receipt = await publicClientSource.waitForTransactionReceipt({ hash })
 
       setStatus({
         percentage: 50,
-        message: `<a href="${getTransactionExplorerLinkByChain(
+        message: `${getAnchorTagTransactionExpolorerByChain(
           hash,
-          sourceAsset.chain
-        )}" class="text-blue-500 underline" target="_blank">Transaction</a>  confirmed. Waiting for finality ...`
+          sourceAsset.chain,
+          'Transaction'
+        )} confirmed. Waiting for finality ...`
       })
       await sleep()
 
@@ -177,26 +180,62 @@ const useSwap = () => {
       const messageId = log.topics[1]
       console.log('messageId', messageId)
 
-      while (true) {
-        const logs = await publicClientDestination.getLogs({
-          address: settings.core[destinationAsset.chain.id].hashi.yaru,
-          event: parseAbiItem('event MessageIdExecuted(uint256 indexed fromChainId, bytes32 indexed messageId)'),
-          // TODO: filter also on fromChainId
-          args: {
-            messageId
+      const waitForNormalExecutionLogs = async () => {
+        while (true) {
+          const logs = await publicClientDestination.getLogs({
+            address: settings.core[destinationAsset.chain.id].hashi.yaru,
+            event: parseAbiItem('event MessageIdExecuted(uint256 indexed fromChainId, bytes32 indexed messageId)'),
+            // TODO: filter also on fromChainId
+            args: {
+              messageId
+            }
+          })
+
+          if (logs.length > 0) {
+            return {
+              method: 'normal',
+              transactionHash: logs[0].transactionHash
+            }
           }
-        })
-
-        if (logs.length > 0) {
-          break
+          await sleep()
         }
-
-        await sleep()
       }
+
+      const waitForFastlaneLogs = async () => {
+        while (true) {
+          const logs = await publicClientDestination.getLogs({
+            address: settings.core[destinationAsset.chain.id].safeJunction.sjReceiver,
+            event: parseAbiItem(
+              'event MessageAdvanced((bytes32 salt, uint256 sourceChainId, uint256 underlyingTokenChainId, uint256 amount, address sender, address receiver, address underlyingTokenAddress, uint8 underlyingTokenDecimals, string underlyingTokenName, string underlyingTokenSymbol))'
+            )
+          })
+
+          // TODO: add check on salt
+
+          if (logs.length > 0) {
+            return {
+              method: 'fastlane',
+              transactionHash: logs[0].transactionHash
+            }
+          }
+          await sleep()
+        }
+      }
+
+      const { method, transactionHash } = await Promise.race([waitForNormalExecutionLogs(), waitForFastlaneLogs()])
+
+      console.log('method', method)
 
       setStatus({
         percentage: 100,
-        message: '🎉 The Fast Lane did its magic! Process completed. 🎉'
+        message:
+          method === 'fastlane'
+            ? `🎉 The Fast Lane did its ${getAnchorTagTransactionExpolorerByChain(
+                transactionHash,
+                destinationAsset.chain,
+                'Magic'
+              )}! Process completed. 🎉 `
+            : `${getAnchorTagTransactionExpolorerByChain(hash, sourceAsset.chain, 'Swap')} completed!`
       })
 
       setSourceAssetAmount('')
