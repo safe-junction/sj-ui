@@ -1,5 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io'
+import { IoIosArrowDown } from 'react-icons/io'
 
 const Header = () => {
   return (
@@ -48,7 +48,7 @@ const Header = () => {
                         <button
                           onClick={openConnectModal}
                           type="button"
-                          className="pt-2 pb-2 pl-3 pr-3 bg-green-400 text-white rounded-3xl font-regular text-lg"
+                          className="pt-2 pb-2 pl-3 pr-3 bg-green-200 text-green-500 text-white rounded-3xl font-regular text-lg hover:text-opacity-50"
                         >
                           Connect
                         </button>
@@ -60,7 +60,7 @@ const Header = () => {
                         <button
                           onClick={openChainModal}
                           type="button"
-                          className="flex justify-between items-center bg-red-400 hover:bg-red-500 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2 text-white text-lg"
+                          className="flex justify-between items-center bg-red-200 text-red-500 hover:text-opacity-50 pt-2 pb-2 pl-3 pr-3 rounded-3xl ml-1 mr-2 text-white text-lg"
                         >
                           Wrong network
                         </button>
@@ -80,7 +80,11 @@ const Header = () => {
                                 {chain.iconUrl && (
                                   <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} height={24} width={24} />
                                 )}
-                                {chainModalOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                                <IoIosArrowDown
+                                  className={`ml-0.5 h-4 w-4 transform transition-transform duration-200 ${
+                                    chainModalOpen ? 'rotate-180' : ''
+                                  }`}
+                                />
                               </div>
                             )}
                           </button>
