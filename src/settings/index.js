@@ -7,9 +7,17 @@ const settings = {
         yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b'
       },
       safeJunction: {
-        sjReceiver: '0x6Fd8B22924151DFD29167aFc2C921ff157127382'
+        sjReceiver: '0xFf84F0a128f43d36F2e91F7850916d458674acA8'
       }
     }
+    /*5: {
+      hashi: {
+        yaru: '0x3A36cA18bF7e1BAC5656CA719AD24F7A97F27bd9'
+      },
+      safeJunction: {
+        sjReceiver: '0x438B1FF80D2d6D0040d4C1d29ab9C260939c7f87'
+      }
+    }*/
   },
   assets: [
     {
@@ -20,18 +28,18 @@ const settings = {
       img: './assets/png/ethereum.png',
       name: 'Wrapped Ether',
       networkImg: './assets/svg/goerli.svg',
-      sjTokenAddress: '0xFa1122c3711AedaF46ac6090dC48F16573177BeC',
+      sjTokenAddress: '0x5e9712e80E275B8c2c5b403e3c8eEAcb6EA333E6',
       symbol: 'WETH'
     },
     {
-      address: '0x2815e7Cd58d25D1638776A741318E9b79C4AE845',
+      address: '0xbB2434A551F0fEcA5220bD5EaB763275b5d96a88',
       chain: gnosis,
       id: 'WETH_GNOSIS',
       decimals: 18,
       img: './assets/png/ethereum.png',
       name: 'SJ Wrapped Ether',
       networkImg: './assets/svg/gnosis.svg',
-      sjTokenAddress: '0x2815e7Cd58d25D1638776A741318E9b79C4AE845',
+      sjTokenAddress: '0xbB2434A551F0fEcA5220bD5EaB763275b5d96a88',
       symbol: '*WETH'
     }
   ]

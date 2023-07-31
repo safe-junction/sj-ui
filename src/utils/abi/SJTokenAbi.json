@@ -41,6 +41,17 @@
     "type": "constructor"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "fastLaneFeeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidFastLaneFeeAmount",
+    "type": "error"
+  },
+  {
     "inputs": [],
     "name": "InvalidSJReceiver",
     "type": "error"
@@ -462,6 +473,11 @@
       {
         "internalType": "uint256",
         "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fastLaneFeeAmount",
         "type": "uint256"
       }
     ],

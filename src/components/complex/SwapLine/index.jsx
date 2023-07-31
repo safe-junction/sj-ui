@@ -2,11 +2,11 @@ import { IoIosArrowDown } from 'react-icons/io'
 
 const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false, disabled = false }) => {
   return (
-    <div className="flex flex-col items-center rounded-md overflow-hidden rounded-xl bg-gray-100 pl-4 pr-4">
-      <div className="flex items-center justify-between mt-4 mb-4 ">
+    <div className="flex flex-col items-center rounded-md overflow-hidden rounded-xl bg-gray-100 pl-3 pr-3">
+      <div className="flex items-center justify-between mt-3 mb-3 ">
         <input
-          className=" focus:outline-none flex-grow w-full  bg-gray-100 text-4xl text-gray-600"
-          type="text"
+          className=" focus:outline-none flex-grow w-full  bg-gray-100 text-3xl text-gray-600"
+          type="number"
           placeholder="0"
           value={amount}
           disabled={disabled}
@@ -33,7 +33,7 @@ const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false,
           <IoIosArrowDown className="text-gray-600" width={24} height={24} />
         </div>
       </div>
-      <div className="flex items-center justify-end mb-3 w-full">
+      <div className="flex items-center justify-end mb-4 w-full">
         <span className="text-xs text-gray-600 mr-1">
           {asset.formattedBalance ? 'Balance:' : ' '} {asset.formattedBalance}
         </span>

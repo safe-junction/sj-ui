@@ -10,6 +10,8 @@ import { getAnchorTagTransactionExpolorerByChain } from '../utils/explorer'
 
 import SJTokenAbi from '../utils/abi/SJTokenAbi.json'
 
+export const AUTO_FASTLANE_FEE = 0.1 // 0.1%
+
 const useSwap = () => {
   const { assets, refresh } = useAssets()
   const { data: walletClient } = useWalletClient()
@@ -20,6 +22,11 @@ const useSwap = () => {
   const [destinationAssetAmount, setDestinationAssetAmount] = useState('')
   const [status, setStatus] = useState(null)
   const [isSwapping, setIsSwapping] = useState(false)
+
+  const [fastLaneEnabled, setFastLaneEnabled] = useState(true)
+  const [showFastLaneOptions, setShowFastLaneOptions] = useState(false)
+  const [fastLaneFeeType, setFastLaneFeeType] = useState('Auto')
+  const [fastLaneFeePercentage, setFastLaneFeePercentage] = useState('')
 
   useEffect(() => {
     if (!address) {
@@ -83,7 +90,19 @@ const useSwap = () => {
       })
 
       let hash
-      const amount = BigNumber(sourceAssetAmount).multipliedBy(10 ** sourceAsset.decimals)
+      const amount = BigNumber(sourceAssetAmount)
+        .multipliedBy(10 ** sourceAsset.decimals)
+        .toFixed()
+      const effectiveFeeFastLanePercentage = fastLaneEnabled
+        ? fastLaneFeeType === 'Auto' || fastLaneFeePercentage.length === 0
+          ? AUTO_FASTLANE_FEE
+          : fastLaneFeePercentage
+        : 0
+      const fastLaneFeeAmount = BigNumber(amount)
+        .multipliedBy(effectiveFeeFastLanePercentage)
+        .dividedToIntegerBy(100)
+        .toFixed()
+
       const publicClientSource = createPublicClient({
         chain: sourceAsset.chain,
         transport: http()
@@ -142,10 +161,8 @@ const useSwap = () => {
         address: sourceAsset.sjTokenAddress,
         abi: SJTokenAbi,
         functionName: 'xTransfer',
-        args: [destinationAsset.chain.id, address, amount]
+        args: [destinationAsset.chain.id, address, amount, fastLaneFeeAmount]
       })
-
-      console.log(hash)
 
       setStatus({
         percentage: 25,
@@ -178,7 +195,7 @@ const useSwap = () => {
         ({ topics }) => topics[0] === '0xe2f8f20ddbedfce5eb59a8b930077e7f4906a01300b9318db5f90d1c96c7b6d4'
       )
       const messageId = log.topics[1]
-      console.log('messageId', messageId)
+      // console.log('messageId', messageId)
 
       const waitForNormalExecutionLogs = async () => {
         while (true) {
@@ -248,16 +265,55 @@ const useSwap = () => {
     } finally {
       setIsSwapping(false)
     }
-  }, [address, sourceAsset, destinationAsset, walletClient, sourceAssetAmount, refresh])
+  }, [
+    address,
+    sourceAsset,
+    destinationAsset,
+    walletClient,
+    sourceAssetAmount,
+    fastLaneEnabled,
+    fastLaneFeePercentage,
+    fastLaneFeeType,
+    refresh
+  ])
+
+  useEffect(() => {
+    if (!fastLaneEnabled) {
+      setShowFastLaneOptions(false)
+      setFastLaneFeePercentage('')
+      setFastLaneFeeType('Auto')
+    }
+  }, [fastLaneEnabled])
+
+  useEffect(() => {
+    if (fastLaneFeeType === 'Auto') {
+      setFastLaneFeePercentage('')
+    }
+  }, [fastLaneFeeType])
+
+  useEffect(() => {
+    if (fastLaneFeePercentage.length === 0) {
+      setFastLaneFeePercentage('')
+      setFastLaneFeeType('Auto')
+    }
+  }, [fastLaneFeePercentage])
 
   return {
     destinationAsset,
     destinationAssetAmount,
+    fastLaneEnabled,
+    fastLaneFeePercentage,
+    fastLaneFeeType,
     invert,
     isSwapping,
     onChangeDestinationAssetAmount,
     onChangeSourceAssetAmount,
     setDestinationAssetAmount,
+    setFastLaneEnabled,
+    setFastLaneFeePercentage,
+    setFastLaneFeeType,
+    setShowFastLaneOptions,
+    showFastLaneOptions,
     sourceAsset,
     sourceAssetAmount,
     status,

@@ -10,8 +10,8 @@ export const formatAssetAmount = (_amount, _symbol, _opts = {}) => {
 
   const formattedNumber = forceDecimals
     ? BigNumber(_amount).toFixed(decimals)
-    : numeral(_amount).format(`0,0[.]${'0'.repeat(decimals)}`)
-  return `${formattedNumber} ${_symbol}`
+    : numeral(BigNumber(_amount).toFixed()).format(`0,0[.]${'0'.repeat(decimals)}`)
+  return `${removeUselessZeros(formattedNumber)} ${_symbol}`
 }
 
 export const removeUselessZeros = (_amount) => _amount.replace(/(\.0+|0+)$/, '')
