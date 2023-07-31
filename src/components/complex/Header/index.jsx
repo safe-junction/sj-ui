@@ -1,15 +1,33 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { IoIosArrowDown } from 'react-icons/io'
 
+import settings from '../../../settings'
+
 const Header = () => {
   return (
     <nav className="bg-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex space-x-2 items-center justify-center">
+        <div className="flex items-center justify-center">
           <img src="./assets/png/logo.png" width={32} height={32} alt="logo" />
-          <span className="hover:bg-gray-100 p-2 rounded-xl ml-1 mr-2 text-gray-600 cursor-pointer font-semibold">
-            Swap
+          <span className="hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium ml-2">
+            Safe Junction
           </span>
+          <a
+            href={settings.links.limo}
+            target="_blank"
+            rel="noreferrer"
+            className="flex hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
+          >
+            Manifesto
+          </a>
+          <a
+            href={settings.links.github}
+            target="_blank"
+            rel="noreferrer"
+            className="hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
+          >
+            Code
+          </a>
         </div>
 
         <div className="flex space-x-4">

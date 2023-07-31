@@ -1,6 +1,10 @@
 import { gnosis, goerli } from 'viem/chains'
 
 const settings = {
+  links: {
+    limo: 'https://safe-junction.eth.limo',
+    github: 'https://github.com/safe-junction'
+  },
   core: {
     100: {
       hashi: {

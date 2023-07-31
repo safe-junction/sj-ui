@@ -93,7 +93,7 @@ const App = () => {
               <div
                 className={`flex ${
                   fastLaneEnabled ? 'bg-blue-100' : ''
-                } pt-1 pl-2 pr-2 pb-1 mr-3 rounded-xl items-center cursor-pointer hover:opacity-70`}
+                } pt-1 pl-2 pr-2 pb-1 mr-3 rounded-xl items-center cursor-pointer hover:bg-blue-200`}
                 onClick={() => setShowOptions(!showOptions)}
               >
                 {fastLaneEnabled && <span className="mr-2 text-xs">Fast Lane</span>}
