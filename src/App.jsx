@@ -85,7 +85,7 @@ const App = () => {
   return (
     <React.Fragment>
       <Header />
-      <Box className="max-w-sm mx-auto pt-3 pb-1 pl-1 pr-1 mt-10">
+      <Box className="max-w-md mx-auto pt-3 pb-1 pl-1 pr-1 mt-10">
         <div className="flex justify-between items-center">
           <span className="text-gray-600 text-sm ml-3">Swap</span>
           <OutsideAlerter onOutside={() => setShowOptions(false)}>
@@ -102,10 +102,10 @@ const App = () => {
                 />
               </div>
               {showOptions && (
-                <Box className="absolute mt-1 right-0 z-10 pt-2 pb-2 pl-3 pr-3 w-72">
+                <Box className="absolute mt-1 right-0 z-10 pt-2 pb-2 pl-3 pr-3 w-80">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col mr-4">
-                      <span className="text-sm text-gray-600">⚡ Fast Lane</span>
+                      <span className="text-md text-gray-600">⚡ Fast Lane</span>
                       <span className="text-xs text-gray-400 mt-1">
                         Get instant access to your bridged assets by paying a fee to market makers (when available)
                       </span>
