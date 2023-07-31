@@ -94,7 +94,7 @@ const useSwap = () => {
       })
 
       if (walletClient.chain.id !== sourceAsset.chain.id) {
-        walletClient.switchChain({ id: sourceAsset.chain.id })
+        await walletClient.switchChain({ id: sourceAsset.chain.id })
       }
 
       if (sourceAsset.sjTokenAddress !== sourceAsset.address) {
