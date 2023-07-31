@@ -3,11 +3,11 @@ import { useAssets } from './use-assets'
 import { useAccount, useWalletClient } from 'wagmi'
 import { erc20ABI } from 'wagmi'
 import BigNumber from 'bignumber.js'
-import { createPublicClient, http, parseAbiItem } from 'viem'
+import { createPublicClient, http } from 'viem'
 
-import settings from '../settings'
 import { getAnchorTagTransactionExpolorerByChain } from '../utils/explorer'
-
+import sleep from '../utils/sleep'
+import { waitForFastlane, waitForNormalExecution } from '../utils/message'
 import SJTokenAbi from '../utils/abi/SJTokenAbi.json'
 
 export const AUTO_FASTLANE_FEE = 0.1 // 0.1%
@@ -27,6 +27,7 @@ const useSwap = () => {
   const [showFastLaneOptions, setShowFastLaneOptions] = useState(false)
   const [fastLaneFeeType, setFastLaneFeeType] = useState('Auto')
   const [fastLaneFeePercentage, setFastLaneFeePercentage] = useState('')
+  const [fastLaneTimeout, setFastLaneTimeout] = useState(false)
 
   useEffect(() => {
     if (!address) {
@@ -74,20 +75,11 @@ const useSwap = () => {
 
   const swap = useCallback(async () => {
     // TODO: remove it
-    const sleep = () =>
-      new Promise((_resolve) =>
-        setTimeout(() => {
-          _resolve()
-        }, 2000)
-      )
 
     try {
+      setFastLaneTimeout(false)
       setIsSwapping(true)
       setStatus(null)
-      setStatus({
-        percentage: 0,
-        message: 'Starting ...'
-      })
 
       let hash
       const amount = BigNumber(sourceAssetAmount)
@@ -114,6 +106,7 @@ const useSwap = () => {
 
       if (walletClient.chain.id !== sourceAsset.chain.id) {
         await walletClient.switchChain({ id: sourceAsset.chain.id })
+        return
       }
 
       if (sourceAsset.sjTokenAddress !== sourceAsset.address) {
@@ -183,7 +176,7 @@ const useSwap = () => {
           'Transaction'
         )} confirmed. Waiting for finality ...`
       })
-      await sleep()
+      await sleep(2000)
 
       setStatus({
         percentage: 75,
@@ -191,68 +184,37 @@ const useSwap = () => {
       })
 
       // 0xe2f8f20ddbedfce5eb59a8b930077e7f4906a01300b9318db5f90d1c96c7b6d4 MessageDispatched
-      const log = receipt.logs.find(
+      const messageDispatchedLog = receipt.logs.find(
         ({ topics }) => topics[0] === '0xe2f8f20ddbedfce5eb59a8b930077e7f4906a01300b9318db5f90d1c96c7b6d4'
       )
-      const messageId = log.topics[1]
+      const messageId = messageDispatchedLog.topics[1]
       // console.log('messageId', messageId)
 
-      const waitForNormalExecutionLogs = async () => {
-        while (true) {
-          const logs = await publicClientDestination.getLogs({
-            address: settings.core[destinationAsset.chain.id].hashi.yaru,
-            event: parseAbiItem('event MessageIdExecuted(uint256 indexed fromChainId, bytes32 indexed messageId)'),
-            // TODO: filter also on fromChainId
-            args: {
-              messageId
-            }
-          })
+      const { transactionHash, timeout } = await Promise.race([
+        fastLaneEnabled
+          ? waitForFastlane(publicClientDestination)
+          : waitForNormalExecution(publicClientDestination, { messageId }),
+        sleep(1000 * 60 * 0.1, { timeout: true })
+      ])
 
-          if (logs.length > 0) {
-            return {
-              method: 'normal',
-              transactionHash: logs[0].transactionHash
-            }
-          }
-          await sleep()
-        }
+      if (timeout) {
+        setFastLaneTimeout(true)
+        console.log('Timeout ...')
+        // TODO
+        setSourceAssetAmount('')
+        setDestinationAssetAmount('')
+        return
       }
-
-      const waitForFastlaneLogs = async () => {
-        while (true) {
-          const logs = await publicClientDestination.getLogs({
-            address: settings.core[destinationAsset.chain.id].safeJunction.sjReceiver,
-            event: parseAbiItem(
-              'event MessageAdvanced((bytes32 salt, uint256 sourceChainId, uint256 underlyingTokenChainId, uint256 amount, address sender, address receiver, address underlyingTokenAddress, uint8 underlyingTokenDecimals, string underlyingTokenName, string underlyingTokenSymbol))'
-            )
-          })
-
-          // TODO: add check on salt
-
-          if (logs.length > 0) {
-            return {
-              method: 'fastlane',
-              transactionHash: logs[0].transactionHash
-            }
-          }
-          await sleep()
-        }
-      }
-
-      const { method, transactionHash } = await Promise.race([waitForNormalExecutionLogs(), waitForFastlaneLogs()])
-
-      console.log('method', method)
 
       setStatus({
         percentage: 100,
-        message:
-          method === 'fastlane'
-            ? `🎉 The Fast Lane did its ${getAnchorTagTransactionExpolorerByChain(
-                transactionHash,
-                destinationAsset.chain,
-                'Magic'
-              )}! Process completed. 🎉 `
-            : `${getAnchorTagTransactionExpolorerByChain(hash, sourceAsset.chain, 'Swap')} completed!`
+        message: fastLaneEnabled
+          ? `🎉 The Fast Lane did its ${getAnchorTagTransactionExpolorerByChain(
+              transactionHash,
+              destinationAsset.chain,
+              'Magic'
+            )}! Process completed. 🎉 `
+          : `${getAnchorTagTransactionExpolorerByChain(hash, destinationAsset.chain, 'Swap')} completed!`
       })
 
       setSourceAssetAmount('')

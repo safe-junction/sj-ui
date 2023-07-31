@@ -8,20 +8,22 @@ const settings = {
   core: {
     100: {
       hashi: {
-        yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b'
+        yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b',
+        hashi: '0x22d64748F4d13576d4615EA854Fbc4283C49Cf32'
       },
       safeJunction: {
         sjReceiver: '0xFf84F0a128f43d36F2e91F7850916d458674acA8'
       }
-    }
-    /*5: {
+    },
+    5: {
       hashi: {
-        yaru: '0x3A36cA18bF7e1BAC5656CA719AD24F7A97F27bd9'
+        yaru: '0x3A36cA18bF7e1BAC5656CA719AD24F7A97F27bd9',
+        yaho: '0xE8F3f26D59b65c17aF64E5C0381DB193B2247F0d'
       },
       safeJunction: {
         sjReceiver: '0x438B1FF80D2d6D0040d4C1d29ab9C260939c7f87'
       }
-    }*/
+    }
   },
   assets: [
     {
