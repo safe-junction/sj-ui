@@ -87,25 +87,23 @@ const App = () => {
       <Header />
       <Box className="max-w-md mx-auto pt-3 pb-1 pl-1 pr-1 mt-10">
         <div className="flex justify-between items-center">
-          <span className="text-gray-600 text-sm ml-3">Swap</span>
+          <span className="text-gray-600 text-sm font-semibold ml-3">Swap</span>
           <OutsideAlerter onOutside={() => setShowOptions(false)}>
             <div className="relative">
               <div
                 className={`flex ${
                   fastLaneEnabled ? 'bg-blue-100' : ''
-                } pt-1 pl-2 pr-2 pb-1 mr-3 rounded-xl items-center`}
+                } pt-1 pl-2 pr-2 pb-1 mr-3 rounded-xl items-center cursor-pointer hover:opacity-70`}
+                onClick={() => setShowOptions(!showOptions)}
               >
-                {fastLaneEnabled && <span className="mr-1 text-xs">Fast Lane</span>}
-                <FiSettings
-                  className="text-gray-600 cursor-pointer h-5 w-5"
-                  onClick={() => setShowOptions(!showOptions)}
-                />
+                {fastLaneEnabled && <span className="mr-2 text-xs">Fast Lane</span>}
+                <FiSettings className="text-gray-600 h-5 w-5" />
               </div>
               {showOptions && (
                 <Box className="absolute mt-1 right-0 z-10 pt-2 pb-2 pl-3 pr-3 w-80">
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col mr-4">
-                      <span className="text-md text-gray-600">⚡ Fast Lane</span>
+                      <span className="text-md text-gray-600 font-medium">⚡ Fast Lane</span>
                       <span className="text-xs text-gray-400 mt-1">
                         Get instant access to your bridged assets by paying a fee to market makers (when available)
                       </span>
@@ -115,9 +113,9 @@ const App = () => {
                   {fastLaneEnabled && (
                     <Fragment>
                       <div className="flex items-center justify-between mt-3">
-                        <span className="text-sm text-gray-400">Fee</span>
+                        <span className="text-sm text-gray-400 font-medium">Fee</span>
                         <span
-                          className="flex items-center text-sm text-gray-600 cursor-pointer"
+                          className="flex items-center text-sm text-gray-600 cursor-pointer font-medium"
                           onClick={() => setShowFastLaneOptions(!showFastLaneOptions)}
                         >
                           {fastLaneFeeType === 'Custom'
@@ -140,7 +138,7 @@ const App = () => {
                           <div className="relative">
                             <input
                               disabled={fastLaneFeeType !== 'Custom'}
-                              className="bg-white border border-gray-200 rounded-xl w-32 pt-1 pl-2 pr-2 pb-1 text-right pr-8 text-gray-600"
+                              className="bg-white border border-gray-200 rounded-xl w-32 pt-1 pl-2 pr-2 pb-1 text-right pr-8 text-gray-600 font-medium"
                               placeholder={AUTO_FASTLANE_FEE}
                               onChange={(_e) => setFastLaneFeePercentage(_e.target.value)}
                               value={fastLaneFeePercentage}
@@ -185,7 +183,7 @@ const App = () => {
           <div className="mt-6 mb-6 pl-4 pr-4">
             <StepProgressBar percent={status.percentage} hasStepZero={true} stepPositions={[0, 25, 50, 75, 100]} />
             <div className="mt-4 flex items-center justify-center">
-              <span className="text-gray-600 text-sm">
+              <span className="text-gray-600 text-sm font-medium">
                 <div dangerouslySetInnerHTML={{ __html: status.message }} />
               </span>
             </div>
@@ -194,7 +192,7 @@ const App = () => {
         <div className="mt-2">
           <button
             disabled={btnDisabled}
-            className="pt-2 pb-2 pl-3 pr-3 bg-green-400 hover:bg-green-500 text-white rounded-2xl font-regular text-lg w-full h-14 disabled:opacity-50"
+            className="pt-2 pb-2 pl-3 pr-3 bg-green-200 text-green-500 rounded-3xl font-semibold text-lg w-full h-14 hover:text-opacity-50 disabled:opacity-50"
             onClick={onButtonClick}
           >
             {buttonText}

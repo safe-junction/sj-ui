@@ -5,9 +5,9 @@ const Header = () => {
   return (
     <nav className="bg-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex space-x-4 items-center justify-center">
+        <div className="flex space-x-2 items-center justify-center">
           <img src="./assets/png/logo.png" width={32} height={32} alt="logo" />
-          <span className="flex justify-between items-center bg-white hover:bg-gray-100 p-2 rounded-xl ml-1 mr-2 text-gray-600 cursor-pointer">
+          <span className="hover:bg-gray-100 p-2 rounded-xl ml-1 mr-2 text-gray-600 cursor-pointer font-semibold">
             Swap
           </span>
         </div>
@@ -48,7 +48,7 @@ const Header = () => {
                         <button
                           onClick={openConnectModal}
                           type="button"
-                          className="pt-2 pb-2 pl-3 pr-3 bg-green-200 text-green-500 text-white rounded-3xl font-regular text-lg hover:text-opacity-50"
+                          className="pt-2 pb-2 pl-4 pr-4 bg-green-200 text-green-500 rounded-3xl font-semibold text-lg hover:text-opacity-50"
                         >
                           Connect
                         </button>
@@ -60,7 +60,7 @@ const Header = () => {
                         <button
                           onClick={openChainModal}
                           type="button"
-                          className="flex justify-between items-center bg-red-200 text-red-500 hover:text-opacity-50 pt-2 pb-2 pl-3 pr-3 rounded-3xl ml-1 mr-2 text-white text-lg"
+                          className="pt-2 pb-2 pl-4 pr-4 bg-red-200 text-red-500 hover:text-opacity-50 rounded-3xl ml-1 mr-2 text-lg font-semibold"
                         >
                           Wrong network
                         </button>
@@ -92,7 +92,7 @@ const Header = () => {
                         <button
                           onClick={openAccountModal}
                           type="button"
-                          className="pt-1 pb-1 pl-2 pr-2 bg-gray-100 rounded-3xl text-md hover:bg-gray-200 text-gray-600"
+                          className="pt-1 pb-1 pl-2 pr-2 bg-gray-100 rounded-3xl text-md hover:bg-gray-200 text-gray-600 font-medium"
                         >
                           {account.displayName}
                         </button>

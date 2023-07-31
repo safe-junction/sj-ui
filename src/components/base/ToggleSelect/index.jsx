@@ -28,7 +28,7 @@ const ToggleSelect = forwardRef(({ initialValue, options = [], onChange = () => 
         <button
           className={`${
             selected === _option ? 'bg-gray-100' : ''
-          } pl-2 pt-1 pr-2 pb-1 rounded-lg text-gray-600 text-sm`}
+          } pl-2 pt-1 pr-2 pb-1 rounded-lg text-gray-600 text-sm font-medium`}
           onClick={() => onClick(_option)}
         >
           {_option}

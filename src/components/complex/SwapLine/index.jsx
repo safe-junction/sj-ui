@@ -5,7 +5,7 @@ const SwapLine = ({ amount, asset, onChangeAmount = () => null, withMax = false,
     <div className="flex flex-col items-center rounded-md overflow-hidden rounded-xl bg-gray-100 pl-3 pr-3">
       <div className="flex items-center justify-between mt-3 mb-3 ">
         <input
-          className=" focus:outline-none flex-grow w-full  bg-gray-100 text-3xl text-gray-600"
+          className=" focus:outline-none flex-grow w-full bg-gray-100 text-3xl text-gray-600 font-medium"
           type="number"
           placeholder="0"
           value={amount}
