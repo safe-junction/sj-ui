@@ -264,7 +264,11 @@ const useSwap = () => {
       setFastLaneFeePercentage('')
       setFastLaneFeeType('Auto')
     }
-  }, [fastLaneEnabled])
+
+    if (!BigNumber(sourceAssetAmount).isNaN()) {
+      onChangeSourceAssetAmount(sourceAssetAmount)
+    }
+  }, [fastLaneEnabled, sourceAssetAmount, onChangeSourceAssetAmount])
 
   useEffect(() => {
     if (fastLaneFeeType === 'Auto') {
