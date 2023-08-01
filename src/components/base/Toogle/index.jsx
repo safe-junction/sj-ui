@@ -10,7 +10,7 @@ const Toggle = ({ value, onChange = () => null }) => {
 
   return (
     <div className="flex">
-      <label class="inline-flex relative items-center cursor-pointer">
+      <label className="inline-flex relative items-center cursor-pointer">
         <input type="checkbox" className="sr-only peer" checked={enabled} readOnly />
         <div
           onClick={onClick}
