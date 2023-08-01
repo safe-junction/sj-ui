@@ -7,7 +7,7 @@ import { createPublicClient, http } from 'viem'
 
 import { getAnchorTagTransactionExpolorerByChain } from '../utils/explorer'
 import sleep from '../utils/sleep'
-import { waitForFastlane, waitForNormalExecution } from '../utils/message'
+import { getMessageIdFromReceipt, waitForFastlane, waitForNormalExecution } from '../utils/message'
 import SJTokenAbi from '../utils/abi/SJTokenAbi.json'
 
 export const AUTO_FASTLANE_FEE = 0.1 // 0.1%
@@ -183,18 +183,12 @@ const useSwap = () => {
         message: 'Waiting for cross chain event propagation ...'
       })
 
-      // 0xe2f8f20ddbedfce5eb59a8b930077e7f4906a01300b9318db5f90d1c96c7b6d4 MessageDispatched
-      const messageDispatchedLog = receipt.logs.find(
-        ({ topics }) => topics[0] === '0xe2f8f20ddbedfce5eb59a8b930077e7f4906a01300b9318db5f90d1c96c7b6d4'
-      )
-      const messageId = messageDispatchedLog.topics[1]
-      // console.log('messageId', messageId)
-
+      const messageId = getMessageIdFromReceipt(receipt)
       const { transactionHash, timeout } = await Promise.race([
         fastLaneEnabled
           ? waitForFastlane(publicClientDestination)
           : waitForNormalExecution(publicClientDestination, { messageId }),
-        sleep(1000 * 60 * 0.1, { timeout: true })
+        sleep(1000 * 60 * 2, { timeout: true })
       ])
 
       if (timeout) {
