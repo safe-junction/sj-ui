@@ -56,7 +56,7 @@ const useSwap = () => {
   }, [sourceAsset, destinationAsset, sourceAssetAmount, destinationAssetAmount])
 
   const onChangeSourceAssetAmount = useCallback(
-    (_amount) => {
+    (_amount, _reset = true) => {
       setSourceAssetAmount(_amount)
 
       if (fastLaneEnabled) {
@@ -73,7 +73,7 @@ const useSwap = () => {
         setDestinationAssetAmount(_amount)
       }
 
-      if (status) setStatus(null)
+      if (status && _reset) setStatus(null)
     },
     [status, fastLaneEnabled, fastLaneFeePercentage]
   )
@@ -98,8 +98,6 @@ const useSwap = () => {
   )
 
   const swap = useCallback(async () => {
-    // TODO: remove it
-
     try {
       setFastLaneTimeout(false)
       setStatus(null)
@@ -266,7 +264,7 @@ const useSwap = () => {
     }
 
     if (!BigNumber(sourceAssetAmount).isNaN()) {
-      onChangeSourceAssetAmount(sourceAssetAmount)
+      onChangeSourceAssetAmount(sourceAssetAmount, false)
     }
   }, [fastLaneEnabled, sourceAssetAmount, onChangeSourceAssetAmount])
 

@@ -9,7 +9,7 @@ const waitForFastlane = async (_client) => {
     const logs = await _client.getLogs({
       address: settings.core[await _client.getChainId()].safeJunction.sjReceiver,
       event: parseAbiItem(
-        'event MessageAdvanced((bytes32 salt, uint256 sourceChainId, uint256 underlyingTokenChainId, uint256 amount, address sender, address receiver, address underlyingTokenAddress, uint8 underlyingTokenDecimals, string underlyingTokenName, string underlyingTokenSymbol))'
+        'event MessageAdvanced((bytes32 salt, uint256 sourceChainId, uint256 underlyingTokenChainId, uint256 amount, uint256 fastLaneFeeAmount, address sender, address receiver, address underlyingTokenAddress, uint8 underlyingTokenDecimals, string underlyingTokenName, string underlyingTokenSymbol))'
       )
     })
 
