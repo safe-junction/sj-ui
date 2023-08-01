@@ -58,19 +58,43 @@ const useSwap = () => {
   const onChangeSourceAssetAmount = useCallback(
     (_amount) => {
       setSourceAssetAmount(_amount)
-      setDestinationAssetAmount(_amount)
+
+      if (fastLaneEnabled) {
+        setDestinationAssetAmount(
+          BigNumber(_amount)
+            .minus(
+              BigNumber(_amount)
+                .multipliedBy(fastLaneFeePercentage.length > 0 ? fastLaneFeePercentage : AUTO_FASTLANE_FEE)
+                .dividedBy(100)
+            )
+            .toFixed()
+        )
+      } else {
+        setDestinationAssetAmount(_amount)
+      }
+
       if (status) setStatus(null)
     },
-    [status]
+    [status, fastLaneEnabled, fastLaneFeePercentage]
   )
 
   const onChangeDestinationAssetAmount = useCallback(
     (_amount) => {
       setDestinationAssetAmount(_amount)
-      setSourceAssetAmount(_amount)
+
+      if (fastLaneEnabled) {
+        setSourceAssetAmount(
+          BigNumber(_amount)
+            .dividedBy(1 - (fastLaneFeePercentage.length > 0 ? fastLaneFeePercentage : AUTO_FASTLANE_FEE) / 100)
+            .toFixed()
+        )
+      } else {
+        setSourceAssetAmount(_amount)
+      }
+
       if (status) setStatus(null)
     },
-    [status]
+    [status, fastLaneEnabled, fastLaneFeePercentage]
   )
 
   const swap = useCallback(async () => {
