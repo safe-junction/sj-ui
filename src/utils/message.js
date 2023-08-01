@@ -17,7 +17,8 @@ const waitForFastlane = async (_client) => {
 
     if (logs.length > 0) {
       return {
-        transactionHash: logs[0].transactionHash
+        transactionHash: logs[0].transactionHash,
+        method: 'fastLane'
       }
     }
     await sleep(4000)
@@ -37,7 +38,8 @@ const waitForNormalExecution = async (_client, { messageId }) => {
 
     if (logs.length > 0) {
       return {
-        transactionHash: logs[0].transactionHash
+        transactionHash: logs[0].transactionHash,
+        method: 'normal'
       }
     }
     await sleep(4000)

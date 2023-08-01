@@ -6,22 +6,22 @@ const settings = {
     github: 'https://github.com/safe-junction'
   },
   core: {
-    100: {
-      hashi: {
-        yaru: '0x18D0492e4d1e53801302c7364c8709f6BCdfb78b',
-        hashi: '0x22d64748F4d13576d4615EA854Fbc4283C49Cf32'
-      },
-      safeJunction: {
-        sjReceiver: '0xFf84F0a128f43d36F2e91F7850916d458674acA8'
-      }
-    },
     5: {
       hashi: {
-        yaru: '0x3A36cA18bF7e1BAC5656CA719AD24F7A97F27bd9',
-        yaho: '0xE8F3f26D59b65c17aF64E5C0381DB193B2247F0d'
+        yaho: '0x0dCA71eF4f6b64771687E9d9264bA5993bBac4A3',
+        yaru: '0x0c2dEDaA5c83Fa106dF5408d86bDfEcf24A284B7'
       },
       safeJunction: {
-        sjReceiver: '0x438B1FF80D2d6D0040d4C1d29ab9C260939c7f87'
+        sjReceiver: '0x9853f904564489343e9889D34D228Da8AF2A9c90'
+      }
+    },
+    100: {
+      hashi: {
+        hashi: '0x84dEd061896baCeE181ACf2F9dAc87497663F896',
+        yaru: '0xced7e6b4Ff0cfE3fD8dB912FBa12d68Cb14f574e'
+      },
+      safeJunction: {
+        sjReceiver: '0xd4DF5E5F277145ef4D3eC4F718E63700e41c6D6E'
       }
     }
   },
@@ -34,18 +34,18 @@ const settings = {
       img: './assets/png/ethereum.png',
       name: 'Wrapped Ether',
       networkImg: './assets/svg/goerli.svg',
-      sjTokenAddress: '0x5e9712e80E275B8c2c5b403e3c8eEAcb6EA333E6',
+      sjTokenAddress: '0xE865bc004f3a9116c060a028bcD18541150fADf2',
       symbol: 'WETH'
     },
     {
-      address: '0xbB2434A551F0fEcA5220bD5EaB763275b5d96a88',
+      address: '0x7a0e5e1593Ec598c17A3dF306173Fda64b4231f7',
       chain: gnosis,
       id: 'WETH_GNOSIS',
       decimals: 18,
       img: './assets/png/ethereum.png',
       name: 'SJ Wrapped Ether',
       networkImg: './assets/svg/gnosis.svg',
-      sjTokenAddress: '0xbB2434A551F0fEcA5220bD5EaB763275b5d96a88',
+      sjTokenAddress: '0x7a0e5e1593Ec598c17A3dF306173Fda64b4231f7',
       symbol: '*WETH'
     }
   ]

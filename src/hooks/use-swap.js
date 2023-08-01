@@ -78,7 +78,6 @@ const useSwap = () => {
 
     try {
       setFastLaneTimeout(false)
-      setIsSwapping(true)
       setStatus(null)
 
       let hash
@@ -108,6 +107,8 @@ const useSwap = () => {
         await walletClient.switchChain({ id: sourceAsset.chain.id })
         return
       }
+
+      setIsSwapping(true)
 
       if (sourceAsset.sjTokenAddress !== sourceAsset.address) {
         const allowance = await publicClientSource.readContract({
@@ -184,11 +185,10 @@ const useSwap = () => {
       })
 
       const messageId = getMessageIdFromReceipt(receipt)
-      const { transactionHash, timeout } = await Promise.race([
-        fastLaneEnabled
-          ? waitForFastlane(publicClientDestination)
-          : waitForNormalExecution(publicClientDestination, { messageId }),
-        sleep(1000 * 60 * 2, { timeout: true })
+      const { transactionHash, method, timeout } = await Promise.race([
+        waitForFastlane(publicClientDestination),
+        waitForNormalExecution(publicClientDestination, { messageId }),
+        sleep(1000 * 60 * 5, { timeout: true })
       ])
 
       if (timeout) {
@@ -202,13 +202,14 @@ const useSwap = () => {
 
       setStatus({
         percentage: 100,
-        message: fastLaneEnabled
-          ? `🎉 The Fast Lane did its ${getAnchorTagTransactionExpolorerByChain(
-              transactionHash,
-              destinationAsset.chain,
-              'Magic'
-            )}! Process completed. 🎉 `
-          : `${getAnchorTagTransactionExpolorerByChain(hash, destinationAsset.chain, 'Swap')} completed!`
+        message:
+          method === 'fastLane'
+            ? `🎉 The Fast Lane did its ${getAnchorTagTransactionExpolorerByChain(
+                transactionHash,
+                destinationAsset.chain,
+                'Magic'
+              )}! Process completed. 🎉 `
+            : `${getAnchorTagTransactionExpolorerByChain(transactionHash, destinationAsset.chain, 'Swap')} completed!`
       })
 
       setSourceAssetAmount('')
