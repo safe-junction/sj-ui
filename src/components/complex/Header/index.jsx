@@ -2,78 +2,53 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { IoIosArrowDown } from 'react-icons/io'
 
 import settings from '../../../settings'
+import { Fragment } from 'react'
 
-const Header = () => {
+const CustomConnectButton = () => {
   return (
-    <nav className="bg-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center justify-center">
-          <img src="./assets/png/logo.png" width={32} height={32} alt="logo" />
-          <span className="hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium ml-2">
-            Safe Junction
-          </span>
-          <a
-            href={settings.links.limo}
-            target="_blank"
-            rel="noreferrer"
-            className="flex hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
+    <ConnectButton.Custom>
+      {({
+        account,
+        chain,
+        openAccountModal,
+        openChainModal,
+        openConnectModal,
+        authenticationStatus,
+        mounted,
+        chainModalOpen,
+        ..._props
+      }) => {
+        // Note: If your app doesn't use authentication, you
+        // can remove all 'authenticationStatus' checks
+        const ready = mounted && authenticationStatus !== 'loading'
+        const connected =
+          ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
+
+        return (
+          <div
+            {...(!ready && {
+              'aria-hidden': true,
+              style: {
+                opacity: 0,
+                pointerEvents: 'none',
+                userSelect: 'none'
+              }
+            })}
           >
-            Manifesto
-          </a>
-          <a
-            href={settings.links.github}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:bg-gray-100 p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
-          >
-            Code
-          </a>
-        </div>
+            {(() => {
+              if (!connected) {
+                return (
+                  <button
+                    onClick={openConnectModal}
+                    type="button"
+                    className="pt-2 pb-2 pl-4 pr-4 bg-green-200 text-green-500 rounded-3xl font-semibold text-lg hover:text-opacity-50"
+                  >
+                    Connect
+                  </button>
+                )
+              }
 
-        <div className="flex space-x-4">
-          <ConnectButton.Custom>
-            {({
-              account,
-              chain,
-              openAccountModal,
-              openChainModal,
-              openConnectModal,
-              authenticationStatus,
-              mounted,
-              chainModalOpen,
-              ..._props
-            }) => {
-              // Note: If your app doesn't use authentication, you
-              // can remove all 'authenticationStatus' checks
-              const ready = mounted && authenticationStatus !== 'loading'
-              const connected =
-                ready && account && chain && (!authenticationStatus || authenticationStatus === 'authenticated')
-
-              return (
-                <div
-                  {...(!ready && {
-                    'aria-hidden': true,
-                    style: {
-                      opacity: 0,
-                      pointerEvents: 'none',
-                      userSelect: 'none'
-                    }
-                  })}
-                >
-                  {(() => {
-                    if (!connected) {
-                      return (
-                        <button
-                          onClick={openConnectModal}
-                          type="button"
-                          className="pt-2 pb-2 pl-4 pr-4 bg-green-200 text-green-500 rounded-3xl font-semibold text-lg hover:text-opacity-50"
-                        >
-                          Connect
-                        </button>
-                      )
-                    }
-
-                    /*if (chain.unsupported) {
+              /*if (chain.unsupported) {
                       return (
                         <button
                           onClick={openChainModal}
@@ -85,45 +60,81 @@ const Header = () => {
                       )
                     }*/
 
-                    return (
-                      <div className="flex justify-between items-center">
-                        {!chain.unsupported && (
-                          <button
-                            onClick={openChainModal}
-                            className="flex justify-between items-center bg-gray-100 hover:bg-gray-200 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2"
-                            type="button"
-                          >
-                            {chain.hasIcon && (
-                              <div height={24} width={24} className=" flex justify-between items-center">
-                                {chain.iconUrl && (
-                                  <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} height={24} width={24} />
-                                )}
-                                <IoIosArrowDown
-                                  className={`ml-0.5 h-4 w-4 transform transition-transform duration-200 ${
-                                    chainModalOpen ? 'rotate-180' : ''
-                                  }`}
-                                />
-                              </div>
-                            )}
-                          </button>
-                        )}
-                        <button
-                          onClick={openAccountModal}
-                          type="button"
-                          className="pt-1 pb-1 pl-2 pr-2 bg-gray-100 rounded-3xl text-md hover:bg-gray-200 text-gray-600 font-medium"
-                        >
-                          {account.displayName}
-                        </button>
-                      </div>
-                    )
-                  })()}
+              return (
+                <div className="flex justify-between items-center">
+                  {!chain.unsupported && (
+                    <button
+                      onClick={openChainModal}
+                      className="flex justify-between items-center bg-gray-100 hover:bg-gray-200 pt-1 pb-1 pl-2 pr-2 rounded-2xl ml-1 mr-2"
+                      type="button"
+                    >
+                      {chain.hasIcon && (
+                        <div height={24} width={24} className=" flex justify-between items-center">
+                          {chain.iconUrl && (
+                            <img alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} height={24} width={24} />
+                          )}
+                          <IoIosArrowDown
+                            className={`ml-0.5 h-4 w-4 transform transition-transform duration-200 ${
+                              chainModalOpen ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </div>
+                      )}
+                    </button>
+                  )}
+                  <button
+                    onClick={openAccountModal}
+                    type="button"
+                    className="pt-1 pb-1 pl-2 pr-2 bg-gray-100 rounded-3xl text-md hover:bg-gray-200 text-gray-600 font-medium"
+                  >
+                    {account.displayName}
+                  </button>
                 </div>
               )
-            }}
-          </ConnectButton.Custom>
-        </div>
+            })()}
+          </div>
+        )
+      }}
+    </ConnectButton.Custom>
+  )
+}
+
+const Header = () => {
+  return (
+    <Fragment>
+      <div className="absolute bottom-0 w-full p-4 rounded-tr-3xl rounded-tl-3xl border border-gray-200 md:hidden">
+        <CustomConnectButton />
       </div>
-    </nav>
+      <nav className="bg-white p-4">
+        <div className="mx-auto flex justify-between items-center">
+          <div className="flex items-center justify-center">
+            <img src="./assets/png/logo.png" width={32} height={32} alt="logo" />
+            <span className="hover:bg-gray-100 p-1 md:p-2 rounded-xl text-gray-600 cursor-pointer font-medium ml-2">
+              Safe Junction
+            </span>
+            <a
+              href={settings.links.limo}
+              target="_blank"
+              rel="noreferrer"
+              className="flex hover:bg-gray-100 p-1 md:p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
+            >
+              Manifesto
+            </a>
+            <a
+              href={settings.links.github}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:bg-gray-100 p-1 md:p-2 rounded-xl text-gray-600 cursor-pointer font-medium"
+            >
+              Code
+            </a>
+          </div>
+          <div className="md:flex space-x-4 hidden">
+            <CustomConnectButton />
+          </div>
+        </div>
+      </nav>
+    </Fragment>
   )
 }
 
