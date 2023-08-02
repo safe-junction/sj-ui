@@ -14,6 +14,7 @@ import Box from './components/base/Box'
 import OutsideAlerter from './components/base/OutsideAlerter'
 import Toggle from './components/base/Toogle'
 import ToggleSelect from './components/base/ToggleSelect'
+import BigNumber from 'bignumber.js'
 
 const App = () => {
   const toggleSelectRef = useRef()
@@ -62,14 +63,20 @@ const App = () => {
     if (isConnecting) return 'Connecting ...'
     if (chain?.unsupported) return 'Wrong network'
     if (sourceAssetAmount === '') return 'Enter an amount ...'
+    if (BigNumber(sourceAssetAmount).isGreaterThan(sourceAsset?.balance)) return 'Insufficent balance'
     if (isSwapping) return 'Swapping ...'
     if (isConnected) return 'Swap'
-  }, [isConnected, isConnecting, isSwapping, sourceAssetAmount, chain?.unsupported])
+  }, [isConnected, isConnecting, isSwapping, sourceAssetAmount, chain?.unsupported, sourceAsset?.balance])
 
   const btnDisabled = useMemo(() => {
     if (chain?.unsupported || !isConnected) return false
-    return isConnecting || sourceAssetAmount === '' || isSwapping
-  }, [chain?.unsupported, isConnecting, sourceAssetAmount, isSwapping, isConnected])
+    return (
+      isConnecting ||
+      sourceAssetAmount === '' ||
+      isSwapping ||
+      BigNumber(sourceAssetAmount).isGreaterThan(sourceAsset?.balance)
+    )
+  }, [chain?.unsupported, isConnecting, sourceAssetAmount, isSwapping, isConnected, sourceAsset?.balance])
 
   const swapLineDisabled = useMemo(() => {
     if (!isConnected || chain?.unsupported || isSwapping) return true
