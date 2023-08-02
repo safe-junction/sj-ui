@@ -63,7 +63,7 @@ const App = () => {
     if (isConnecting) return 'Connecting ...'
     if (chain?.unsupported) return 'Wrong network'
     if (sourceAssetAmount === '') return 'Enter an amount ...'
-    if (BigNumber(sourceAssetAmount).isGreaterThan(sourceAsset?.balance)) return 'Insufficent balance'
+    if (BigNumber(sourceAssetAmount).isGreaterThan(sourceAsset?.balance)) return 'Insufficient balance'
     if (isSwapping) return 'Swapping ...'
     if (isConnected) return 'Swap'
   }, [isConnected, isConnecting, isSwapping, sourceAssetAmount, chain?.unsupported, sourceAsset?.balance])
